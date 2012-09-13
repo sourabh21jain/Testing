@@ -1,24 +1,28 @@
 from piston.handler import BaseHandler
 from api.models import KidPlaylist
-
+from piston.utils import rc, throttle
 
 class BlogPostHandler(BaseHandler):
-	allowed_methods = ('GET','POST','DELETE','PUT')
-	#fields = ('link_desc','link_url')
+	allowed_methods = ('GET','POST','PUT',)
+	fields = ('kid_name','kid_login_name')
    	model = KidPlaylist
-	
-#	def update(self,request,id):
-#		print request,22222
-#		link = Link.objects.get(id=id)
-	#	print link.link_desc,11111, request.data['link_desc']
-#		link.link_desc = request.data['link_desc']
-#		link.link_url = request.data['link_url']
-		#print link.link_desc,2222
-#		link.save()
-#		return link
 
-#	def read(self, request):
-#		link_desc = request.POST['link_desc']
-#		link_url = request.POST['link_url']
-#	        post = Blogpost.objects.create(link_desc=link_desc,link_url=link_url)
- #       	return post
+        def read(self, request,id):
+            post = KidPlaylist.objects.get(id=id)
+            if post:
+	        return post
+
+        @throttle(5, 10*60) # allow 5 times in 10 minutes
+        def update(self, request, id):
+            post = KidPlaylist.objects.get(id=id)
+            post.kid_name = request.data['kid_name']
+            post.kid_login_name= request.data['kid_login_name']
+	    post.save()
+
+            return post
+
+        def delete(self, request, id):
+            post = Blogpost.objects.get(id=id)
+            post.delete()
+            return rc.DELETED # returns HTTP 204
+

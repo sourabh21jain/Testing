@@ -7,9 +7,6 @@ class KidPlaylist(models.Model):
 	kid_login_name = models.CharField(max_length=200)
 	creation_date = models.DateField(auto_now=True)
 	
-	def __str__(self):
-		return self.kid_login_name
-	
 class Header(models.Model):
     title = models.CharField(max_length = 255)
     created_by = models.CharField(max_length = 255)
