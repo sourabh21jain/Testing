@@ -1,0 +1,28 @@
+<html>
+<head>
+</head>
+<body>
+{% if message %}
+	<b>{{message}}</b>
+{% endif %}
+
+{% if kid %}
+	<table>
+	{% for kids in kid %}
+		<tr bgcolor="{% cycle FFFFFF,EEEEEE as rowcolor %}">
+		<td>{{ kids.kid_name }}</td>
+		<td>{{ kids.kid_login_name }} </td>
+		<td><a href="/links/edit/{{ kids.id }}">Edit </a></td><br>
+		<td><a href="/links/delete/{{ kids.id }}">Delete </a></td>
+		</tr>
+	{% endfor %}	
+</table>
+{% endif %}
+<a href='/links/new'>Add Link</a>
+</body>
+
+
+
+
+</html>
+
